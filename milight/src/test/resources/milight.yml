@@ -1,0 +1,20 @@
+miLight:
+  commandWait: 1
+  weather:
+    uri: http://localhost:51125/wien/
+    sunriseRegEx: <p.*?title="Sonnenaufgang".*?(\d\d):(\d\d)
+    sunsetRegEx: <p.*?title="Sonnenuntergang".*?(\d\d):(\d\d)
+  wifiBox:
+      ipFrom: 192.168.0.12
+      ipTo: 192.168.0.20
+      commands:
+        - white 1
+        - color 3 111
+        - off
+  rest:
+    authorization: Basic cmVpbmhhcmQ6bWVpblNpY2hlcmVzUFdEITIy
+    uri:
+      - http://localhost:51125/milight/white/3
+      - http://localhost:51125/milight/white/4
+  macAddress:
+    - a1-23-bc-4d-56-e7

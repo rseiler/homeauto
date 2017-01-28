@@ -1,0 +1,4 @@
+weather:
+  uri: http://localhost:51125/wien/
+  sunriseRegEx: <p.*?title="Sonnenaufgang".*?(\d\d):(\d\d)
+  sunsetRegEx: <p.*?title="Sonnenuntergang".*?(\d\d):(\d\d)

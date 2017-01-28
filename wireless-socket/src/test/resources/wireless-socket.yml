@@ -1,0 +1,5 @@
+wirelessSocket:
+  sendCount: 3
+  sendSleep: 1
+  macAddress:
+    - a1-23-bc-4d-56-e7

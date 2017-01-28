@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>homeauto</artifactId>
+        <groupId>at.rseiler.homeauto</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>mono</artifactId>
+    <name>mono</name>
+    <description>
+        Packs the milight and wireless-socket applications into one application. This is done to save memory
+        (since it runs on an Raspberry) and so that not every program does it's own device scan.
+    </description>
+
+    <properties>
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <skipCodeAnalysis>false</skipCodeAnalysis>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>at.rseiler.homeauto</groupId>
+            <artifactId>wireless-socket</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>at.rseiler.homeauto</groupId>
+            <artifactId>milight</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>mono</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <archive>
+                        <manifest>
+                            <mainClass>at.rseiler.homeauto.mono.MonoMain</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

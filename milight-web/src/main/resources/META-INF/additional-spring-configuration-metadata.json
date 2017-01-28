@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "miLight.wifiBox.ipFrom",
+      "type": "java.lang.String",
+      "description": "Scans the IPs beginning from this IP."
+    },
+    {
+      "name": "miLight.wifiBox.ipTo",
+      "type": "java.lang.String",
+      "description": "Scans the IPs until to this IP."
+    }
+  ]
+}

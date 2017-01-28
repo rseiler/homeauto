@@ -1,0 +1,22 @@
+{
+  "id" : "798adf78-de9a-ce9e-90f0-90db09bae80c",
+  "request" : {
+    "url" : "/",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 401,
+    "bodyFileName" : "body-milight.txt",
+    "headers" : {
+      "Date" : "Thu, 01 Jan 1970 00:20:05 GMT",
+      "Server" : "HTTPD",
+      "WWW-Authenticate": "Basic realm=\"USER LOGIN\"",
+      "Pragma": "no-cache",
+      "Cache-Control": "no-cache",
+      "Content-Type": "text/html",
+      "Accept-Ranges" : "none",
+      "Connection" : "close"
+    }
+  },
+  "uuid" : "798adf78-de9a-ce9e-90f0-90db09bae80c"
+}

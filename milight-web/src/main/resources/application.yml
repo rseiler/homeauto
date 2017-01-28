@@ -1,0 +1,4 @@
+miLight:
+  wifiBox:
+    ipFrom: 192.168.0.12
+    ipTo: 192.168.0.20

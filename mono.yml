@@ -1,0 +1,32 @@
+deviceWatcher:
+  ipFrom: 192.168.0.12
+  ipTo: 192.168.0.20
+  macAddress:
+    - c8:60:00:dd:d0:63
+    - c8-60-00-dd-d0-63
+    - ac:5f:3e:2b:b3:83
+    - ac-5f-3e-2b-b3-83
+  ttl: 15000
+  sleepTime: 10000
+
+miLight:
+  commandWait: 100
+  weather:
+    uri: http://wetter.orf.at/wien/
+    sunriseRegEx: <p.*?title="Sonnenaufgang".*?(\d\d):(\d\d)
+    sunsetRegEx: <p.*?title="Sonnenuntergang".*?(\d\d):(\d\d)
+  wifiBox:
+    ipFrom: 192.168.0.12
+    ipTo: 192.168.0.20
+    commands:
+      - on 1
+  macAddress:
+    - ac:5f:3e:2b:b3:83
+    - ac-5f-3e-2b-b3-83
+
+wirelessSocket:
+  sendCount: 20
+  sendSleep: 100
+  macAddress:
+    - c8:60:00:dd:d0:63
+    - c8-60-00-dd-d0-63

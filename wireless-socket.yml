@@ -1,0 +1,14 @@
+deviceWatcher:
+  ipFrom: 192.168.0.12
+  ipTo: 192.168.0.20
+  macAddress:
+    - c8:60:00:dd:d0:63
+    - c8-60-00-dd-d0-63
+  ttl: 15000
+
+wirelessSocket:
+  sendCount: 20
+  sendSleep: 100
+  macAddress:
+    - c8:60:00:dd:d0:63
+    - c8-60-00-dd-d0-63

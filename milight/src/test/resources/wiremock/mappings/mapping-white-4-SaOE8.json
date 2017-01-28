@@ -1,0 +1,17 @@
+{
+  "id" : "6b383634-c4e8-384a-9135-d4f3235f817c",
+  "request" : {
+    "url" : "/milight/white/4",
+    "method" : "POST"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-white-4-SaOE8.txt",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "Transfer-Encoding" : "chunked",
+      "Date" : "Fri, 27 Jan 2017 07:36:07 GMT"
+    }
+  },
+  "uuid" : "6b383634-c4e8-384a-9135-d4f3235f817c"
+}
