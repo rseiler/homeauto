@@ -1,8 +1,8 @@
 package at.rseiler.homeauto.common;
 
 import at.rseiler.homeauto.common.fortest.FileUtil;
-import at.rseiler.homeauto.common.weather.config.WeatherConfig;
 import at.rseiler.homeauto.common.weather.WeatherService;
+import at.rseiler.homeauto.common.weather.config.WeatherConfig;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
