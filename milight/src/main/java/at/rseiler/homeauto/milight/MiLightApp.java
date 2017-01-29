@@ -70,8 +70,14 @@ public class MiLightApp {
 
     private void turnOnLight() {
         LOGGER.info("Turned on the light");
-        config.getRest().getUri().forEach(this::execRestCommand);
-        config.getWifiBox().getCommands().forEach(this::execWifiBoxCommand);
+
+        if (config.getRest() != null) {
+            config.getRest().getUri().forEach(this::execRestCommand);
+        }
+
+        if (config.getWifiBox() != null) {
+            config.getWifiBox().getCommands().forEach(this::execWifiBoxCommand);
+        }
     }
 
     private void scheduleTurnOnLight(LocalTime sunsetTime) {
