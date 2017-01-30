@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Observer;
+import java.util.function.Consumer;
 
 import static org.mockito.Mockito.*;
 
@@ -28,7 +28,7 @@ public class DeviceWatcherTest {
     private static final String MAC = "a1-23-bc-4d-56-e7";
     private DeviceWatcherConfigWrapper config;
     private ArpCommand arpCommand;
-    private Observer observer;
+    private Consumer<DeviceEvent> deviceEventConsumer;
     private HostReachable hostReachable;
     private DeviceWatcher deviceWatcher;
 
@@ -39,7 +39,7 @@ public class DeviceWatcherTest {
         hostReachable = mock(HostReachable.class);
         arpCommand = mock(ArpCommand.class);
         when(arpCommand.getMacAddress(IP)).thenReturn(MAC);
-        observer = mock(Observer.class);
+        deviceEventConsumer = spy(new DeviceEventConsumer());
     }
 
     @Test(timeout = 2000)
@@ -48,7 +48,7 @@ public class DeviceWatcherTest {
 
         createDeviceWatcher();
 
-        verify(observer, timeout(1000).times(1)).update(any(), eq(createDeviceEvent(State.ON)));
+        verify(deviceEventConsumer, timeout(1000).times(1)).accept(eq(createDeviceEvent(State.ON)));
         deviceWatcher.stop();
     }
 
@@ -58,7 +58,7 @@ public class DeviceWatcherTest {
 
         createDeviceWatcher();
 
-        verify(observer, timeout(1000).times(1)).update(any(), eq(createDeviceEvent(State.OFF)));
+        verify(deviceEventConsumer, timeout(1000).times(1)).accept(eq(createDeviceEvent(State.OFF)));
         deviceWatcher.stop();
     }
 
@@ -68,7 +68,7 @@ public class DeviceWatcherTest {
         ArpCmdSupplier arpCmdSupplier = mock(ArpCmdSupplier.class);
         when(arpCmdSupplier.create()).thenReturn(arpCommand);
         deviceWatcher = new DeviceWatcher(config.getDeviceWatcher(), hostReachableSupplier, arpCmdSupplier);
-        deviceWatcher.addObserver(observer);
+        deviceWatcher.subscribe(deviceEventConsumer);
         deviceWatcher.start();
     }
 
@@ -84,6 +84,15 @@ public class DeviceWatcherTest {
 
         @JsonPOJOBuilder(withPrefix = "")
         static final class DeviceWatcherConfigWrapperBuilder {
+        }
+    }
+
+    /**
+     * This class is needed because {@link org.mockito.Mockito#spy(Object)} doesn't work on lambdas.
+     */
+    private static class DeviceEventConsumer implements Consumer<DeviceEvent> {
+        @Override
+        public void accept(DeviceEvent deviceEvent) {
         }
     }
 }

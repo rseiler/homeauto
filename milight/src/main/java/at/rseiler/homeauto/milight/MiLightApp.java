@@ -48,7 +48,7 @@ public class MiLightApp {
             LOGGER.error("MiLight: failed to connect to wifi box");
         }
 
-        deviceWatcher.addObserver((observable, arg) -> eventHandler((DeviceEvent) arg));
+        deviceWatcher.subscribe(this::eventHandler);
     }
 
     private void eventHandler(DeviceEvent deviceEvent) {

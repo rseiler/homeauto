@@ -25,7 +25,7 @@ public class WirelessSocketApp {
      */
     public void start() {
         LOGGER.info("Wireless Socket: started");
-        deviceWatcher.addObserver((observable, arg) -> observe((DeviceEvent) arg));
+        deviceWatcher.subscribe(this::observe);
     }
 
     private void observe(DeviceEvent deviceEvent) {
