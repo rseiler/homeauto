@@ -1,10 +1,12 @@
 deviceWatcher:
   ipFrom: 192.168.0.12
   ipTo: 192.168.0.20
+  ttl: 15000
+  threadCount: 4
+  sleepTime: 5000
   macAddress:
     - ac:5f:3e:2b:b3:83
     - ac-5f-3e-2b-b3-83
-  ttl: 15000
 
 miLight:
   commandWait: 100

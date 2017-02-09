@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,7 +24,6 @@ import java.util.concurrent.Future;
 class DeviceWatcherThread extends Thread {
     static final int MAX_THREAD_COUNT = 9;
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceWatcherThread.class);
-    private static final int THREAD_FACTOR = 3;
     private final DeviceWatcher deviceWatcher;
     private final DeviceWatcherConfig deviceWatcherConfig;
     private final HostReachableSupplier hostReachableSupplier;
@@ -33,7 +35,7 @@ class DeviceWatcherThread extends Thread {
     @Override
     public void run() {
         IpFromTo ipFromTo = new IpFromTo(deviceWatcherConfig.getIpFrom(), deviceWatcherConfig.getIpTo());
-        int threadCount = calcThreadCount(ipFromTo);
+        int threadCount = deviceWatcherConfig.getThreadCount();
         LOGGER.info("Using {} thread{}", threadCount, threadCount > 1 ? "s" : "");
         ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
@@ -91,16 +93,6 @@ class DeviceWatcherThread extends Thread {
                 map.put(host, new DeviceData(macAddress, System.currentTimeMillis()));
             }
         }
-    }
-
-    static int calcThreadCount(IpFromTo ipFromTo) {
-        int count = 2;
-
-        for (Iterator<String> it = ipFromTo.iterator(); count < MAX_THREAD_COUNT * THREAD_FACTOR && it.hasNext(); count++) {
-            it.next();
-        }
-
-        return count / THREAD_FACTOR;
     }
 
     @Data

@@ -1,13 +1,14 @@
 deviceWatcher:
   ipFrom: 192.168.0.12
   ipTo: 192.168.0.20
+  ttl: 15000
+  threadCount: 4
+  sleepTime: 5000
   macAddress:
     - c8:60:00:dd:d0:63
     - c8-60-00-dd-d0-63
     - ac:5f:3e:2b:b3:83
     - ac-5f-3e-2b-b3-83
-  ttl: 15000
-  sleepTime: 10000
 
 miLight:
   commandWait: 100
@@ -25,8 +26,9 @@ miLight:
     - ac-5f-3e-2b-b3-83
 
 wirelessSocket:
-  sendCount: 20
-  sendSleep: 100
+  command: "sudo /home/pi/raspberry-remote/send 01100 2 "
+  sendCount: 5
+  sendSleep: 1000
   macAddress:
     - c8:60:00:dd:d0:63
     - c8-60-00-dd-d0-63

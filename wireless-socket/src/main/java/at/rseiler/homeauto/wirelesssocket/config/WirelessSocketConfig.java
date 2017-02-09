@@ -14,6 +14,9 @@ import java.util.List;
 @JsonDeserialize(builder = WirelessSocketConfigBuilder.class)
 public class WirelessSocketConfig {
     @JsonProperty(required = true)
+    private final String command;
+
+    @JsonProperty(required = true)
     private final int sendCount;
 
     @JsonProperty(required = true)

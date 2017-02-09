@@ -46,7 +46,7 @@ public class WirelessSocketApp {
         try {
             LOGGER.info("Send {}", state);
             String param = state == State.ON ? "1" : "0";
-            Runtime.getRuntime().exec(new String[]{"sh", "-c", "sudo /home/pi/raspberry-remote/send 01100 2 " + param});
+            Runtime.getRuntime().exec(new String[]{"sh", "-c", config.getCommand() + param});
         } catch (IOException e) {
             LOGGER.error("Failed to turn on/off the light", e);
         }

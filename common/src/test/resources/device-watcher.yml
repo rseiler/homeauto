@@ -1,7 +1,8 @@
 deviceWatcher:
   ipFrom: 127.0.0.1
   ipTo: 127.0.0.1
+  ttl: 1
+  threadCount: 1
+  sleepTime: 2
   macAddress:
     - a1-23-bc-4d-56-e7
-  ttl: 1
-  sleepTime: 2
