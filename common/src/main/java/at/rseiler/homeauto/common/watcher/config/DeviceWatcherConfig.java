@@ -23,6 +23,9 @@ public class DeviceWatcherConfig {
     private final long ttl;
 
     @JsonProperty(required = true)
+    private final int retryCount;
+
+    @JsonProperty(required = true)
     private final int threadCount;
 
     @JsonProperty(required = true)

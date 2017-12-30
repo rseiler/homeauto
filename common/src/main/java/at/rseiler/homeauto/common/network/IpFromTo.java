@@ -47,6 +47,7 @@ public class IpFromTo implements Iterable<String> {
                 if (current[index] < to[index]) {
                     return true;
                 }
+
             }
 
             return false;

@@ -15,14 +15,14 @@ import static org.junit.Assert.assertTrue;
 
 public class MiLightWiFiBoxServiceBuilderTest {
     @ClassRule
-    public static WireMockClassRule WIRE_MOCK_RULE = new WireMockClassRule(WireMockConfiguration.options().port(80).usingFilesUnderClasspath("wiremock"));
+    public static WireMockClassRule WIRE_MOCK_RULE = new WireMockClassRule(WireMockConfiguration.options().port(10112).usingFilesUnderClasspath("wiremock"));
 
     @Rule
     public WireMockClassRule wireMockRule = WIRE_MOCK_RULE;
 
     @Test
     public void buildSuccessful() throws Exception {
-        MiLightWiFiBoxConfig config = new MiLightWiFiBoxConfig("127.0.0.1", "127.0.0.1", Collections.emptyList());
+        MiLightWiFiBoxConfig config = new MiLightWiFiBoxConfig("127.0.0.1", "127.0.0.1", 10112, Collections.emptyList());
         Optional<MiLightWiFiBoxService> miLightWiFiBoxService = new MiLightWiFiBoxServiceBuilder(config).build();
 
         assertTrue(miLightWiFiBoxService.isPresent());
@@ -31,7 +31,7 @@ public class MiLightWiFiBoxServiceBuilderTest {
     @Test
     public void buildFail() throws Exception {
         wireMockRule.stop();
-        MiLightWiFiBoxConfig config = new MiLightWiFiBoxConfig("127.0.0.1", "127.0.0.1", Collections.emptyList());
+        MiLightWiFiBoxConfig config = new MiLightWiFiBoxConfig("127.0.0.1", "127.0.0.1", 10112, Collections.emptyList());
         Optional<MiLightWiFiBoxService> miLightWiFiBoxService = new MiLightWiFiBoxServiceBuilder(config).build();
 
         assertFalse(miLightWiFiBoxService.isPresent());

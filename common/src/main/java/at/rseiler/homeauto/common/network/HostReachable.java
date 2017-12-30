@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 @Data
 public class HostReachable implements Callable<Boolean> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HostReachable.class);
-    private static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 7500;
     private final String host;
 
     /**

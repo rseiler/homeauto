@@ -21,6 +21,9 @@ public class MiLightWiFiBoxConfig {
     @JsonProperty(required = true)
     private final String ipTo;
 
+    @JsonProperty(defaultValue = "80")
+    private final int port;
+
     @JsonProperty(required = true)
     private final List<String> commands;
 

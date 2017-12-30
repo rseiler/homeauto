@@ -1,6 +1,5 @@
 package de.toman.milight;
 
-import javax.annotation.Generated;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -13,7 +12,6 @@ import java.net.UnknownHostException;
  *
  * @author Stefan Toman (toman@tum.de)
  */
-@Generated("de.toman")
 @SuppressWarnings("all")
 public class WiFiBox {
     /**
@@ -300,6 +298,7 @@ public class WiFiBox {
 
         // start new thread
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 try {
                     for (byte[] message : messages) {

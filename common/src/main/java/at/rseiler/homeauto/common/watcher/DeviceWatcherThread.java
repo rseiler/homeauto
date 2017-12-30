@@ -19,10 +19,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 class DeviceWatcherThread extends Thread {
-    static final int MAX_THREAD_COUNT = 9;
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceWatcherThread.class);
     private final DeviceWatcher deviceWatcher;
     private final DeviceWatcherConfig deviceWatcherConfig;
@@ -42,21 +43,23 @@ class DeviceWatcherThread extends Thread {
         while (running) {
             List<String> reachableHosts = new ArrayList<>();
 
-            for (String ip : ipFromTo) {
-                if (!map.containsKey(ip) || map.get(ip).time < System.currentTimeMillis() - deviceWatcherConfig.getTtl()) {
-                    Future<Boolean> reachableFuture = threadPool.submit(hostReachableSupplier.create(ip));
+            StreamSupport.stream(ipFromTo.spliterator(), false)
+                    .filter(ip -> !map.containsKey(ip) || map.get(ip).time < System.currentTimeMillis() - deviceWatcherConfig.getTtl())
+                    .map(ip -> new IpFuture(ip, threadPool.submit(hostReachableSupplier.create(ip))))
+                    .collect(Collectors.toList())
+                    .forEach(ipFuture -> {
+                        try {
+                            String ip = ipFuture.getIp();
 
-                    try {
-                        if (reachableFuture.get()) {
-                            reachableHosts.add(ip);
-                        } else if (map.containsKey(ip)) {
-                            handleUnreachableHost(ip);
+                            if (ipFuture.getReachable().get()) {
+                                reachableHosts.add(ip);
+                            } else if (map.containsKey(ip)) {
+                                handleUnreachableHost(ip);
+                            }
+                        } catch (InterruptedException | ExecutionException e) {
+                            LOGGER.debug("Interrupted", e);
                         }
-                    } catch (InterruptedException | ExecutionException e) {
-                        LOGGER.debug("Interrupted", e);
-                    }
-                }
-            }
+                    });
 
             handleReachableHosts(reachableHosts);
             firstRun = false;
@@ -75,8 +78,14 @@ class DeviceWatcherThread extends Thread {
     }
 
     private void handleUnreachableHost(String host) {
-        DeviceData deviceData = map.remove(host);
-        deviceWatcher.fireEvent(new DeviceEvent(host, deviceData.mac, DeviceWatcher.State.OFF));
+        DeviceData data = map.get(host);
+
+        if (data.getUnreachableCount() < deviceWatcherConfig.getRetryCount()) {
+            data.incrementUnreachableCount();
+        } else {
+            DeviceData deviceData = map.remove(host);
+            deviceWatcher.fireEvent(new DeviceEvent(host, deviceData.mac, DeviceWatcher.State.OFF));
+        }
     }
 
     private void handleReachableHosts(List<String> reachableHosts) {
@@ -99,5 +108,16 @@ class DeviceWatcherThread extends Thread {
     private static final class DeviceData {
         private final String mac;
         private final long time;
+        private int unreachableCount;
+
+        private void incrementUnreachableCount() {
+            unreachableCount++;
+        }
+    }
+
+    @Data
+    private static final class IpFuture {
+        private final String ip;
+        private final Future<Boolean> reachable;
     }
 }

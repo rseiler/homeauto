@@ -47,7 +47,7 @@ public class MiLightWiFiBoxServiceBuilder {
         IpFromTo ipFromTo = new IpFromTo(config.getIpFrom(), config.getIpTo());
 
         for (String ip : ipFromTo) {
-            if (isMiLightServer("http://" + ip)) {
+            if (isMiLightServer("http://" + ip + ":" + config.getPort())) {
                 return createWiFiBox(ip).map(MiLightWiFiBoxService::new);
             }
         }
