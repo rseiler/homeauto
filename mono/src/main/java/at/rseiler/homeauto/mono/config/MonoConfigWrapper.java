@@ -1,6 +1,7 @@
 package at.rseiler.homeauto.mono.config;
 
 
+import at.rseiler.homeauto.arduino.config.ArduinoConfig;
 import at.rseiler.homeauto.common.watcher.config.DeviceWatcherConfig;
 import at.rseiler.homeauto.milight.config.MiLightConfig;
 import at.rseiler.homeauto.mono.config.MonoConfigWrapper.MonoConfigWrapperBuilder;
@@ -15,6 +16,9 @@ import lombok.Value;
 @Builder
 @JsonDeserialize(builder = MonoConfigWrapperBuilder.class)
 public class MonoConfigWrapper {
+    @JsonProperty(required = true)
+    private final ArduinoConfig arduino;
+
     @JsonProperty(required = true)
     private final DeviceWatcherConfig deviceWatcher;
 

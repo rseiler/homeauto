@@ -1,0 +1,29 @@
+//    public static void main(String[] args) throws IOException {
+//        for (String s : NRSerialPort.getAvailableSerialPorts()) {
+//            System.out.println("Availible port: " + s);
+//        }
+//        String port = "COM3";
+//        int baudRate = 9600;
+//        NRSerialPort serial = new NRSerialPort(port, baudRate);
+//        serial.connect();
+//
+//        DataInputStream ins = new DataInputStream(serial.getInputStream());
+//        DataOutputStream outs = new DataOutputStream(serial.getOutputStream());
+//
+//        StringBuffer command = new StringBuffer();
+//        while (true) {
+//            int c = ins.read();
+//
+//            if (c > 0) {
+//                if (c == '\n') {
+//                    System.out.println(command);
+//                    command = new StringBuffer();
+//                } else {
+//                    command.append((char) c);
+//                }
+//            }
+//        }
+////        outs.write(b);
+//
+////        serial.disconnect();
+//    }

@@ -2,41 +2,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>homeauto</artifactId>
         <groupId>at.rseiler.homeauto</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mono</artifactId>
-    <name>mono</name>
-    <description>
-        Packs the milight and wireless-socket applications into one application. This is done to save memory
-        (since it runs on an Raspberry) and so that not every program does it's own device scan.
-    </description>
-
-    <properties>
-        <main.basedir>${project.parent.basedir}</main.basedir>
-        <skipCodeAnalysis>false</skipCodeAnalysis>
-    </properties>
+    <artifactId>arduino</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>at.rseiler.homeauto</groupId>
-            <artifactId>wireless-socket</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.ardulink</groupId>
+            <artifactId>ardulink-core-base</artifactId>
+            <version>2.0.1</version>
         </dependency>
         <dependency>
-            <groupId>at.rseiler.homeauto</groupId>
-            <artifactId>milight</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.ardulink</groupId>
+            <artifactId>ardulink-core-serial-jssc</artifactId>
+            <version>2.0.1</version>
         </dependency>
         <dependency>
-            <groupId>at.rseiler.homeauto</groupId>
-            <artifactId>arduino</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.ardulink</groupId>
+            <artifactId>ardulink-core-serial-rxtx</artifactId>
+            <version>2.0.1</version>
+            <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.ardulink</groupId>
+            <artifactId>ardulink-core-proxy</artifactId>
+            <version>2.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>com.neuronrobotics</groupId>-->
+        <!--<artifactId>nrjavaserial</artifactId>-->
+        <!--<version>3.12.1</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -44,11 +47,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>mono</finalName>
+                    <finalName>arduino</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>at.rseiler.homeauto.mono.MonoMain</mainClass>
+                            <mainClass>at.rseiler.homeauto.arduino.Arduino</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -66,4 +69,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

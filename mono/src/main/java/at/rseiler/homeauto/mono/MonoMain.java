@@ -1,5 +1,6 @@
 package at.rseiler.homeauto.mono;
 
+import at.rseiler.homeauto.arduino.Arduino;
 import at.rseiler.homeauto.common.YmlUtil;
 import at.rseiler.homeauto.common.milight.MiLightWiFiBoxServiceBuilder;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher;
@@ -34,6 +35,7 @@ public final class MonoMain {
             File yml = new File("mono.yml");
             MonoConfigWrapper config = YmlUtil.read(yml, MonoConfigWrapper.class);
             LOGGER.trace(Files.toString(yml, StandardCharsets.UTF_8));
+            Arduino arduino = new Arduino(config.getArduino());
             DeviceWatcherConfig deviceWatcherConfig = config.getDeviceWatcher();
             DeviceWatcher deviceWatcher = new DeviceWatcher(deviceWatcherConfig);
 
@@ -41,9 +43,10 @@ public final class MonoMain {
             wirelessSocketApp.start();
 
             MiLightWiFiBoxServiceBuilder builder = new MiLightWiFiBoxServiceBuilder(config.getMiLight().getWifiBox());
-            MiLightApp miLightApp = new MiLightApp(config.getMiLight(), deviceWatcher, builder);
+            MiLightApp miLightApp = new MiLightApp(config.getMiLight(), arduino, deviceWatcher, builder);
             miLightApp.start();
 
+            arduino.start();
             deviceWatcher.start();
         } catch (IOException e) {
             LOGGER.error("Failed to read wireless-socket.yml", e);

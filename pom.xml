@@ -25,6 +25,7 @@
         <module>mono</module>
         <module>milight-web</module>
         <module>shell</module>
+        <module>arduino</module>
     </modules>
 
     <properties>

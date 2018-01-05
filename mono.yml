@@ -1,3 +1,8 @@
+arduino:
+  port:
+    - /dev/ttyACM0
+    - /dev/ttyACM1
+
 deviceWatcher:
   ipFrom: 192.168.0.12
   ipTo: 192.168.0.12
@@ -20,6 +25,7 @@ miLight:
     ipTo: 192.168.0.21
     commands:
       - on 1
+      - on 4
   macAddress:
     - c8:60:00:dd:d0:63
     - c8-60-00-dd-d0-63

@@ -54,7 +54,7 @@ public class MiLightAppTest {
         wiFiBox = mock(WiFiBox.class);
         MiLightWiFiBoxService miLightWiFiBoxService = new ForTestMiLightWiFiBoxService(wiFiBox);
         when(miLightWiFiBoxServiceBuilder.build()).thenReturn(Optional.of(miLightWiFiBoxService));
-        miLightApp = spy(new MiLightApp(miLightConfigWrapper.getMiLight(), deviceWatcher, miLightWiFiBoxServiceBuilder));
+        miLightApp = spy(new MiLightApp(miLightConfigWrapper.getMiLight(), null, deviceWatcher, miLightWiFiBoxServiceBuilder));
         miLightApp.start();
     }
 

@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>at.rseiler.homeauto</groupId>
+            <artifactId>arduino</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>at.rseiler.homeauto</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>

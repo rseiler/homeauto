@@ -1,5 +1,7 @@
 package at.rseiler.homeauto.milight;
 
+import at.rseiler.homeauto.arduino.Arduino;
+import at.rseiler.homeauto.arduino.Arduino.ArduinoAction;
 import at.rseiler.homeauto.common.HttpUtil;
 import at.rseiler.homeauto.common.milight.MiLightCommand;
 import at.rseiler.homeauto.common.milight.MiLightWiFiBoxService;
@@ -28,11 +30,13 @@ import java.util.TimerTask;
 public class MiLightApp {
     private static final Logger LOGGER = LoggerFactory.getLogger(MiLightApp.class);
     private final MiLightConfig config;
+    private final Arduino arduino;
     private final DeviceWatcher deviceWatcher;
     private final MiLightWiFiBoxServiceBuilder miLightWiFiBoxServiceBuilder;
     private MiLightWiFiBoxService miLightWiFiBoxService;
     private WeatherService weatherService;
-    private Timer timer = new Timer();
+    private Timer turnOnLightTimer = new Timer();
+    private Timer turnOffLightTimer = new Timer();
 
     /**
      * Starts listening to the {@link MiLightApp#deviceWatcher}'s events and connects to the MiLight-WiFi-Box.
@@ -49,6 +53,26 @@ public class MiLightApp {
         }
 
         deviceWatcher.subscribe(this::eventHandler);
+
+        if (arduino != null) {
+            arduino.subscribe(this::arduinoHandler);
+        }
+    }
+
+    private void arduinoHandler(ArduinoAction arduinoAction) {
+        if (arduinoAction == ArduinoAction.ENTERING) {
+            LocalTime sunsetTime = weatherService.getSunsetTime();
+
+            if (localTime().isAfter(sunsetTime) || localTime().isBefore(LocalTime.of(6, 0))) {
+                turnOnLight();
+            } else {
+                scheduleTurnOnLight(sunsetTime);
+            }
+        } else if (arduinoAction == ArduinoAction.LEAVING) {
+            LOGGER.info("Turn off the light");
+            turnOnLightTimer.cancel();
+            execWifiBoxCommand("off ");
+        }
     }
 
     private void eventHandler(DeviceEvent deviceEvent) {
@@ -62,14 +86,13 @@ public class MiLightApp {
                     scheduleTurnOnLight(sunsetTime);
                 }
             } else {
-                timer.cancel();
+                turnOnLightTimer.cancel();
             }
         }
-
     }
 
     private void turnOnLight() {
-        LOGGER.info("Turned on the light");
+        LOGGER.info("Turn on the light");
 
         if (config.getRest() != null) {
             config.getRest().getUri().forEach(this::execRestCommand);
@@ -78,13 +101,21 @@ public class MiLightApp {
         if (config.getWifiBox() != null) {
             config.getWifiBox().getCommands().forEach(this::execWifiBoxCommand);
         }
+
+        turnOffLightTimer.cancel();
+        turnOffLightTimer = new Timer();
+        turnOffLightTimer.schedule(new TurnOffLightTimerTask(), 180_000L);
+    }
+
+    private void turnOffLight() {
+        execWifiBoxCommand("off 4");
     }
 
     private void scheduleTurnOnLight(LocalTime sunsetTime) {
         LOGGER.info("Schedule to turn on the light");
-        timer.cancel();
-        timer = new Timer();
-        timer.schedule(new TurnOnLightTimerTask(), ChronoUnit.MILLIS.between(localTime(), sunsetTime));
+        turnOnLightTimer.cancel();
+        turnOnLightTimer = new Timer();
+        turnOnLightTimer.schedule(new TurnOnLightTimerTask(), ChronoUnit.MILLIS.between(localTime(), sunsetTime));
     }
 
     private void execRestCommand(String uri) {
@@ -114,6 +145,13 @@ public class MiLightApp {
         @Override
         public void run() {
             turnOnLight();
+        }
+    }
+
+    private class TurnOffLightTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            turnOffLight();
         }
     }
 }

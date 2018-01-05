@@ -37,6 +37,7 @@ public class MiLightWiFiBoxServiceBuilder {
             .setDefaultRequestConfig(REQUEST_CONFIG)
             .build();
     private final MiLightWiFiBoxConfig config;
+    private Optional<MiLightWiFiBoxService> miLightWiFiBoxService;
 
     /**
      * Builds the MiLightWiFiBoxService.
@@ -44,15 +45,22 @@ public class MiLightWiFiBoxServiceBuilder {
      * @return an optional MiLightWiFiBoxService instance
      */
     public Optional<MiLightWiFiBoxService> build() {
-        IpFromTo ipFromTo = new IpFromTo(config.getIpFrom(), config.getIpTo());
+        if (miLightWiFiBoxService == null) {
+            IpFromTo ipFromTo = new IpFromTo(config.getIpFrom(), config.getIpTo());
 
-        for (String ip : ipFromTo) {
-            if (isMiLightServer("http://" + ip + ":" + config.getPort())) {
-                return createWiFiBox(ip).map(MiLightWiFiBoxService::new);
+            for (String ip : ipFromTo) {
+                if (isMiLightServer("http://" + ip + ":" + config.getPort())) {
+                    miLightWiFiBoxService = createWiFiBox(ip).map(MiLightWiFiBoxService::new);
+                    break;
+                }
+            }
+
+            if (miLightWiFiBoxService == null) {
+                miLightWiFiBoxService = Optional.empty();
             }
         }
 
-        return Optional.empty();
+        return miLightWiFiBoxService;
     }
 
     private boolean isMiLightServer(String uri) {

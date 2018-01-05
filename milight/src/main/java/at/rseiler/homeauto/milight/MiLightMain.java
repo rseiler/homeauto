@@ -16,18 +16,17 @@ import java.io.IOException;
  * <p>
  * It reads the from the working directory the milight.yml config file and starts the application.
  */
-
 public final class MiLightMain {
     private static final Logger LOGGER = LoggerFactory.getLogger(MiLightMain.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         try {
             File yml = new File("milight.yml");
             MiLightConfigWrapper config = YmlUtil.read(yml, MiLightConfigWrapper.class);
             DeviceWatcherConfig deviceWatcherConfig = config.getDeviceWatcher();
             DeviceWatcher deviceWatcher = new DeviceWatcher(deviceWatcherConfig);
             MiLightWiFiBoxServiceBuilder builder = new MiLightWiFiBoxServiceBuilder(config.getMiLight().getWifiBox());
-            MiLightApp miLightApp = new MiLightApp(config.getMiLight(), deviceWatcher, builder);
+            MiLightApp miLightApp = new MiLightApp(config.getMiLight(), null, deviceWatcher, builder);
             miLightApp.start();
             deviceWatcher.start();
         } catch (IOException e) {
