@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>rseiler's display</title>
+    <script th:src="@{/script.js}" defer="defer"></script>
+    <style>
+        /*body {background-color: black}*/
+
+        #datetime {
+            width: 100%;
+        }
+
+        #time {
+            font-size: 250px;
+            line-height: 85%;
+        }
+
+        #date {
+            text-align: right;
+            font-size: 120px;
+            line-height: 85%;
+        }
+
+        #calendar {
+            width: 100%;
+            margin-top: 2em;
+            font-size: 40px;
+        }
+
+        #calendar td {
+            padding-right: 0.5em;
+        }
+
+        #calendar .organiser {
+            text-align: right;
+        }
+
+        #weather {
+            width: 100%;
+            height: 300px;
+            margin-top: 1em;
+        }
+
+        #weather #temperature-svg {
+            font-family: 'Courier New', monospace;
+        }
+
+        #weather #humidity-svg {
+            margin-left: 1.5em;
+        }
+
+        #weather #humidity-svg .no-rain {
+            font-size: 40px;
+        }
+
+        #weather svg .bold {
+            font-weight: bold;
+        }
+
+        #weather svg .data {
+            fill: none;
+            stroke-width: 4px;
+            stroke: black;
+        }
+    </style>
+</head>
+<body id="body">
+
+<!--/*@thymesVar id="template" type="java.lang.String"*/-->
+<div class="container" layout:fragment="content"></div>
+
+</body>
+</html>
+
