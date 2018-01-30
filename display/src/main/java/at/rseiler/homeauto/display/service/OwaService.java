@@ -80,7 +80,6 @@ public class OwaService {
                     .map(item -> item.replaceAll("\"", ""))
                     .map(item -> item.split(","))
                     .map(itemValues -> new CalendarEntry(
-                            itemValues,
                             itemValues[7],
                             LocalDateTime.parse(itemValues[3] + itemValues[4].replace(" UTC", ""), DATE_TIME_FORMATTER),
                             LocalDateTime.parse(itemValues[5] + itemValues[6].replace(" UTC", ""), DATE_TIME_FORMATTER),
@@ -110,7 +109,7 @@ public class OwaService {
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            LOGGER.error("Error", e);
         }
 
         try (CloseableHttpResponse response = sendRequest(httpPost)) {
@@ -126,7 +125,9 @@ public class OwaService {
 
     private void owa() {
         HttpGet httpGet = new HttpGet("https://webgraz.styria-it.com/owa/");
-        try (CloseableHttpResponse response = sendRequest(httpGet)) {
+        try {
+            CloseableHttpResponse response = sendRequest(httpGet);
+            response.close();
         } catch (IOException e) {
             LOGGER.error("Error", e);
         }

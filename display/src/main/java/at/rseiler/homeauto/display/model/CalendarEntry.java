@@ -7,15 +7,13 @@ import java.time.format.DateTimeFormatter;
 public class CalendarEntry {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    private final String[] rawValues;
     private final String title;
     private final LocalDateTime from;
     private final LocalDateTime to;
     private final String room;
     private final String organiser;
 
-    public CalendarEntry(String[] rawValues, String title, LocalDateTime from, LocalDateTime to, String room, String organiser) {
-        this.rawValues = rawValues;
+    public CalendarEntry(String title, LocalDateTime from, LocalDateTime to, String room, String organiser) {
         this.title = title;
         this.from = from;
         this.to = to;

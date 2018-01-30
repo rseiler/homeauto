@@ -4,7 +4,6 @@ import at.rseiler.homeauto.common.YmlUtil;
 import at.rseiler.homeauto.common.fortest.FileUtil;
 import at.rseiler.homeauto.common.milight.ForTestMiLightWiFiBoxService;
 import at.rseiler.homeauto.common.milight.MiLightWiFiBoxService;
-import at.rseiler.homeauto.common.milight.MiLightWiFiBoxServiceBuilder;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher.DeviceEvent;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher.State;
 import at.rseiler.homeauto.common.watcher.ForTestDeviceWatcher;
@@ -20,7 +19,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.time.LocalTime;
-import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -50,11 +48,9 @@ public class MiLightAppTest {
         File yml = FileUtil.get("milight", "src/test/resources/milight.yml");
         MiLightConfigWrapper miLightConfigWrapper = YmlUtil.read(yml, MiLightConfigWrapper.class);
         deviceWatcher = new ForTestDeviceWatcher(null);
-        MiLightWiFiBoxServiceBuilder miLightWiFiBoxServiceBuilder = mock(MiLightWiFiBoxServiceBuilder.class);
         wiFiBox = mock(WiFiBox.class);
         MiLightWiFiBoxService miLightWiFiBoxService = new ForTestMiLightWiFiBoxService(wiFiBox);
-        when(miLightWiFiBoxServiceBuilder.build()).thenReturn(Optional.of(miLightWiFiBoxService));
-        miLightApp = spy(new MiLightApp(miLightConfigWrapper.getMiLight(), null, deviceWatcher, miLightWiFiBoxServiceBuilder));
+        miLightApp = spy(new MiLightApp(miLightConfigWrapper.getMiLight(), null, deviceWatcher, miLightWiFiBoxService));
         miLightApp.start();
     }
 

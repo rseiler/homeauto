@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -15,12 +16,13 @@ import static org.springframework.http.HttpStatus.OK;
  * Listens to the HTTP requests and passes them to {@link MiLightWiFiBoxService#exec(MiLightCommand)}.
  */
 @RestController
-public class ActionController {
+@RequestMapping("/m")
+public class MiLightRestController {
 
     private final MiLightWiFiBoxService miLightWiFiBoxService;
 
     @Autowired
-    public ActionController(MiLightWiFiBoxService miLightWiFiBoxService) {
+    public MiLightRestController(MiLightWiFiBoxService miLightWiFiBoxService) {
         this.miLightWiFiBoxService = miLightWiFiBoxService;
     }
 

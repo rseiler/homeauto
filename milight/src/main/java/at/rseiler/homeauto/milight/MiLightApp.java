@@ -5,7 +5,6 @@ import at.rseiler.homeauto.arduino.Arduino.ArduinoAction;
 import at.rseiler.homeauto.common.HttpUtil;
 import at.rseiler.homeauto.common.milight.MiLightCommand;
 import at.rseiler.homeauto.common.milight.MiLightWiFiBoxService;
-import at.rseiler.homeauto.common.milight.MiLightWiFiBoxServiceBuilder;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher.DeviceEvent;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher.State;
@@ -18,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,8 +30,7 @@ public class MiLightApp {
     private final MiLightConfig config;
     private final Arduino arduino;
     private final DeviceWatcher deviceWatcher;
-    private final MiLightWiFiBoxServiceBuilder miLightWiFiBoxServiceBuilder;
-    private MiLightWiFiBoxService miLightWiFiBoxService;
+    private final MiLightWiFiBoxService miLightWiFiBoxService;
     private WeatherService weatherService;
     private Timer turnOnLightTimer = new Timer();
     private Timer turnOffLightTimer = new Timer();
@@ -44,14 +41,6 @@ public class MiLightApp {
     public void start() {
         LOGGER.info("MiLight: started");
         weatherService = new WeatherService(config.getWeather());
-        Optional<MiLightWiFiBoxService> miLightWiFiBoxServiceOptional = miLightWiFiBoxServiceBuilder.build();
-
-        if (miLightWiFiBoxServiceOptional.isPresent()) {
-            miLightWiFiBoxService = miLightWiFiBoxServiceOptional.get();
-        } else {
-            LOGGER.error("MiLight: failed to connect to wifi box");
-        }
-
         deviceWatcher.subscribe(this::eventHandler);
 
         if (arduino != null) {
@@ -60,18 +49,27 @@ public class MiLightApp {
     }
 
     private void arduinoHandler(ArduinoAction arduinoAction) {
-        if (arduinoAction == ArduinoAction.ENTERING) {
-            LocalTime sunsetTime = weatherService.getSunsetTime();
+        LocalTime sunsetTime = weatherService.getSunsetTime();
 
-            if (localTime().isAfter(sunsetTime) || localTime().isBefore(LocalTime.of(6, 0))) {
-                turnOnLight();
-            } else {
-                scheduleTurnOnLight(sunsetTime);
-            }
-        } else if (arduinoAction == ArduinoAction.LEAVING) {
-            LOGGER.info("Turn off the light");
-            turnOnLightTimer.cancel();
-            execWifiBoxCommand("off ");
+        switch (arduinoAction) {
+            case MOVEMENT:
+                if (localTime().isAfter(sunsetTime) || localTime().isBefore(LocalTime.of(6, 0))) {
+                    execWifiBoxCommand("on 4");
+                    scheduleTurnOffLight();
+                }
+                break;
+            case ENTER:
+                if (localTime().isAfter(sunsetTime) || localTime().isBefore(LocalTime.of(6, 0))) {
+                    turnOnLight();
+                } else {
+                    scheduleTurnOnLight(sunsetTime);
+                }
+                break;
+            case LEAVE:
+                LOGGER.info("Turn off the light");
+                turnOnLightTimer.cancel();
+                execWifiBoxCommand("off");
+                break;
         }
     }
 
@@ -102,9 +100,13 @@ public class MiLightApp {
             config.getWifiBox().getCommands().forEach(this::execWifiBoxCommand);
         }
 
+        scheduleTurnOffLight();
+    }
+
+    private void scheduleTurnOffLight() {
         turnOffLightTimer.cancel();
         turnOffLightTimer = new Timer();
-        turnOffLightTimer.schedule(new TurnOffLightTimerTask(), 180_000L);
+        turnOffLightTimer.schedule(new TurnOffLightTimerTask(), 300_000L);
     }
 
     private void turnOffLight() {
@@ -124,6 +126,7 @@ public class MiLightApp {
     }
 
     private void execWifiBoxCommand(String command) {
+        LOGGER.info("wifi box cmd: " + command);
         miLightWiFiBoxService.exec(MiLightCommand.fromString(command));
         commandWait();
     }

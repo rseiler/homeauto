@@ -69,17 +69,19 @@ public class Arduino {
                 String command = new String(bytes);
                 LOGGER.info(command);
 
-                if (command.contains("entering")) {
-                    fireEvent(ArduinoAction.ENTERING);
-                } else if (command.contains("leaving")) {
-                    fireEvent(ArduinoAction.LEAVING);
+                if (command.contains("enter")) {
+                    fireEvent(ArduinoAction.ENTER);
+                } else if (command.contains("leave")) {
+                    fireEvent(ArduinoAction.LEAVE);
+                }    else if (command.contains("movement")) {
+                    fireEvent(ArduinoAction.MOVEMENT);
                 }
             }
         };
     }
 
     public enum ArduinoAction {
-        ENTERING, LEAVING
+        ENTER, MOVEMENT, LEAVE
     }
 
     @RequiredArgsConstructor

@@ -1,6 +1,7 @@
 package at.rseiler.homeauto.milight;
 
 import at.rseiler.homeauto.common.YmlUtil;
+import at.rseiler.homeauto.common.milight.MiLightWiFiBoxService;
 import at.rseiler.homeauto.common.milight.MiLightWiFiBoxServiceBuilder;
 import at.rseiler.homeauto.common.watcher.DeviceWatcher;
 import at.rseiler.homeauto.common.watcher.config.DeviceWatcherConfig;
@@ -25,8 +26,8 @@ public final class MiLightMain {
             MiLightConfigWrapper config = YmlUtil.read(yml, MiLightConfigWrapper.class);
             DeviceWatcherConfig deviceWatcherConfig = config.getDeviceWatcher();
             DeviceWatcher deviceWatcher = new DeviceWatcher(deviceWatcherConfig);
-            MiLightWiFiBoxServiceBuilder builder = new MiLightWiFiBoxServiceBuilder(config.getMiLight().getWifiBox());
-            MiLightApp miLightApp = new MiLightApp(config.getMiLight(), null, deviceWatcher, builder);
+            MiLightWiFiBoxService miLightWiFiBoxService = new MiLightWiFiBoxServiceBuilder(config.getMiLight().getWifiBox()).build().orElseThrow(() -> new RuntimeException("Failed to connect to the milight wifi box"));
+            MiLightApp miLightApp = new MiLightApp(config.getMiLight(), null, deviceWatcher, miLightWiFiBoxService);
             miLightApp.start();
             deviceWatcher.start();
         } catch (IOException e) {
