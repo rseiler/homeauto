@@ -23,7 +23,7 @@ public class MiLightWebApp {
     }
 
     @Bean
-    MiLightWiFiBoxService miLightWiFiBoxService(
+    public MiLightWiFiBoxService miLightWiFiBoxService(
             @Value("${miLight.wifiBox.ipFrom}") String ipFrom,
             @Value("${miLight.wifiBox.ipTo}") String ipTo,
             @Value("${miLight.wifiBox.port:80}") int port) {
