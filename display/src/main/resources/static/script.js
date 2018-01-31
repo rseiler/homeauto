@@ -24,7 +24,9 @@
 
     function timeFormat() {
         var date = new Date();
-        return pad2(date.getHours() + (isKindle ? 1 : 0)) + ':' +
+        var hour = date.getHours() + (isKindle ? 1 : 0);
+        hour = hour === 24 ? 0 : hour;
+        return pad2(hour) + ':' +
             pad2(date.getMinutes());
     }
 
