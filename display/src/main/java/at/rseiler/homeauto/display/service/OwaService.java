@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -68,7 +69,7 @@ public class OwaService {
                 .getValue();
 
         HttpPost httpPost = new HttpPost("https://webgraz.styria-it.com/owa/ev.owa?oeh=1&ns=CalendarView&ev=GetViewPayload");
-        httpPost.setEntity(new StringEntity("<params><canary>" + userContext + "</canary><fId><item>LgAAAABqtUsvDAoLQLlOZivkU+a4AQC4MY36W+ldTbvORMqNIzyDAAAA+ECkAAAC</item></fId><days><item>2018-01-29T00:00:00</item></days><vt>3</vt></params>"));
+        httpPost.setEntity(new StringEntity("<params><canary>" + userContext + "</canary><fId><item>LgAAAABqtUsvDAoLQLlOZivkU+a4AQC4MY36W+ldTbvORMqNIzyDAAAA+ECkAAAC</item></fId><days><item>" + LocalDate.now() + "T00:00:00</item></days><vt>3</vt></params>"));
         CloseableHttpResponse response = sendRequest(httpPost);
         String javaScript = EntityUtils.toString(response.getEntity());
         Matcher matcher = RGITM_PATTERN.matcher(javaScript);

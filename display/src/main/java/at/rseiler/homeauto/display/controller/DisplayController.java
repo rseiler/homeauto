@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,9 @@ public class DisplayController {
 
     @GetMapping("/")
     public ModelAndView home() throws IOException {
-        LocalDate now = LocalDate.now();
+        LocalDate date = LocalDate.now().plusDays(LocalTime.now().getHour() > 17 ? 1 : 0);
         List<CalendarEntry> calendarEntries = owaService.getCalendarData().stream()
-                .filter(calendarEntry -> now.compareTo(calendarEntry.getFrom().toLocalDate()) >= 0 && (now.compareTo(calendarEntry.getTo().toLocalDate()) <= 0))
+                .filter(calendarEntry -> date.compareTo(calendarEntry.getFrom().toLocalDate()) >= 0 && (date.compareTo(calendarEntry.getTo().toLocalDate()) <= 0))
                 .collect(Collectors.toList());
         ModelAndView modelAndView = new ModelAndView("page/home");
         modelAndView.addObject("calendarEntries", calendarEntries);
