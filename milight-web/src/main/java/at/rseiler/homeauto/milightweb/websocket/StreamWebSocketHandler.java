@@ -18,11 +18,12 @@ class StreamWebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
+    @SuppressWarnings("PMD")
     protected synchronized void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         handleCommand(message.getPayload());
     }
 
+    @SuppressWarnings("PMD")
     private synchronized void handleCommand(String command)  {
         miLightWiFiBoxService.exec(MiLightCommand.fromString(command));
     }

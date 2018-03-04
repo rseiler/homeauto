@@ -70,7 +70,7 @@
 (function updateCalendar() {
     'use strict';
     setInterval(function () {
-        if (new Date().getHours() === 1) {
+        if (new Date().getHours() === 18) {
             var weatherNode = document.getElementById("calendar");
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {

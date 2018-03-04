@@ -144,7 +144,7 @@ public class OwaService {
                 LOGGER.error("X-OWA-Error: ", response.getFirstHeader("X-OWA-Error").getValue());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("OWA request failed", e);
         }
 
         return response;

@@ -14,6 +14,7 @@ import java.util.Arrays;
 /**
  * Wrapper for the WiFiBox from de.toman.
  */
+@SuppressWarnings("PMD")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class MiLightWiFiBoxService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MiLightWiFiBoxService.class);

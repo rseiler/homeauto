@@ -70,6 +70,9 @@ public class MiLightApp {
                 turnOnLightTimer.cancel();
                 execWifiBoxCommand("off");
                 break;
+            default:
+                LOGGER.warn("Unexpected Arduino command: " + arduinoAction);
+                break;
         }
     }
 
